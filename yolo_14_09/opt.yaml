@@ -1,0 +1,31 @@
+data: data/22_2_ashdod_erez_youtube_not_sliced_for_train.yaml
+weights:
+- //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt
+batch_size: 1
+imgsz: 3840
+conf_thres:
+- 0.24
+- 0.24
+- 0.1
+- 0.24
+iou_thres: 0.2
+confusion_iou_thres: 0.002
+task: val
+device: ''
+single_cls: false
+augment: false
+verbose: false
+save_txt: true
+save_hybrid: false
+save_conf: true
+save_json: false
+project: runs/val
+name: val_on_erez_set_weights_ashdod_erez_youtube_with_conf_shai
+exist_ok: false
+half: true
+save_FP: false
+save_FN: false
+make_movie: false
+false_save_class:
+- 0
+plot_bbox_size: false

@@ -1,0 +1,8 @@
+[Unit]
+Description=Custom Startup Script
+ 
+[Service]
+ExecStart=/home/user1/ariel/byte_tracker_for_einat_0.3/startup_run_cotainer.sh
+ 
+[Install]
+WantedBy=default.target

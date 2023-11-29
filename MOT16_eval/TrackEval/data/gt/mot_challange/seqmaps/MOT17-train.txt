@@ -1,0 +1,1 @@
+<frame>,<class>,<id>,<bb_left>,<bb_top>,<bb_width>,<bb_height>,<conf>,<x>,<y>,<z>

@@ -1,0 +1,11 @@
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: /MyHomeDir/yolo_14_09/data/atr_zafrir/tagged_22_02_2022_erez/ # dataset root dir
+train: images/train  # train images 
+val: /MyHomeDir/yolo_14_09/data/atr_zafrir/tagged_22_02_2022_erez/images/val  # val images
+
+
+
+# Classes
+nc: 11  # number of classes
+names: ['Person', 'Person on board a vessel', 'Swimmer', 'Sail boat', 'Floating object',  'Dvora', 'Zeara', 'PWC', 'Merchant Ship', 'Inflatable Boat', 'Vessel']  # class names

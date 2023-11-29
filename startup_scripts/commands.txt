@@ -1,0 +1,12 @@
+for automatic run upon booting jetson orin:
+1) change content of file 1.service
+	ExecStart=/home/user1/ariel/byte_tracker_for_einat_0.3/startup_run_cotainer.sh
+2) copy 1.service :
+	sudo cp 1.service /etc/systemd/system/.
+3) copy startup_run_cotainer.sh to /home/user1/ariel/byte_tracker_for_einat_0.3/
+
+4) copy start.sh to working dir
+
+
+
+DO NOT FORGET sudo chmod 777 ... to all sh files.

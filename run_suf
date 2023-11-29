@@ -1,0 +1,24 @@
+xhost +
+
+WITH CAMERA:
+docker run --rm -it --shm-size=32g --runtime=nvidia --network host -e NVIDIA_VISIBLE_DEVICE=0 -e DISPLAY=$DISPLAY --device /dev/video0 -v /home/user1/ariel:/app -v /tmp/.X11-unix:/tmp/.X11-unix --entrypoint /bin/bash ben_docker:latest
+
+WITHOUT CAMERA:
+	docker run --rm -it --shm-size=32g --runtime=nvidia -e NVIDIA_VISIBLE_DEVICE=0 -e DISPLAY=$DISPLAY -v /home/user1/ariel:/app -v /tmp/.X11-unix:/tmp/.X11-unix --entrypoint /bin/bash ben_docker:latest
+
+cd /app/byte_tracker_for_einat_0.3/
+
+ulimit -c 0
+
+# 4K   3840X2160
+python3 track.py --source 0 --yolo_model yolov5_v7/weights/best_388.pt --name suf_testing --imgsz 3840 --device 0 --conf-thres 0.1 --use-bytetracker --classes 0  --tracker-lowfps 16 --magi-alg
+
+# FHD   1920X1080
+python3 track.py --source 0 --yolo_model yolov5_v7/weights/best_388.pt --name suf_testing --imgsz 1920 --device 0 --conf-thres 0.1 --use-bytetracker --classes 0 --magi-alg
+
+# --save-txt --save-vid --out-video --match_thresh 0.4 --track_thresh 0.2
+
+
+
+#EXPORT COMMAND
+python3 yolov5_v7/export.py --weights yolov5_v7/weights/best_388.pt --half --include engine --imgsz 3840 --device 0

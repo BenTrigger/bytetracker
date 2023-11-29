@@ -1,0 +1,12 @@
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: /MyHomeDir/yolo_14_09/data/Baloons_DATA/tagged_2_2_2023_all_frames/sliced_1600_no_bird_no_light_drone/ # dataset root dir
+train: images/train  # train images 
+# for yolov7 add to train path: /MyHomeDir/yolo_14_09/data/atr_zafrir/tagged_22_02_22_EREZ_ashdod_youtube/sliced/
+val: images/val  # val images
+
+
+
+# Classes
+nc: 7  # number of classes
+names: ['Drone','AirPlane','UFO','AirPlane_w_lights','Baloons','Single_front_lights','other']  # class names

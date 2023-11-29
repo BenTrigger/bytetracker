@@ -1,0 +1,94 @@
+python3.8 val.py --data data/tagged_23_12_zafrir_val_on_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/train_results_zafrir_23_12_2021/weights/best.pt --imgsz 1600 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24  --name val_on_sliced_23_12
+
+# 14/02/2022
+python3.8 val.py --data data/tagged_14_02_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/train_results_14_02_22/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_val_set_fullimg_14_02_22
+python3.8 val.py --data data/tagged_14_02_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/train_results_14_02_22/weights/last.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_val_set_fullimg_14_02_22_last_weights
+python3.8 val.py --data data/tagged_14_02_zafrir_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/train_results_14_02_22/weights/best.pt --imgsz 1600 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_val_set_sliced_14_02_22
+
+python3.8 train.py --data /MyHomeDir/yolo_14_09/data/tagged_14_02_zafrir_sliced.yaml --epochs 100 --batch-size 4 --imgsz 1600 --device 0 --weights weights/yolov5l6-1280.pt --name train_results_14_02_22
+
+# 22/02/2022 EREZ ONLY GAZA
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/tagged_22_02_22_erez/ --weights /MyHomeDir/yolo_14_09/runs/train/train_results_14_02_22/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.24
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/train_results_14_02_22/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_erez_set_fullimg_14_02_22
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_erez_set_fullimg_weights_22_02_22_ashdod_erez
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_erez_set_weights_22_02_22_ashdod_erez_youtube
+
+#22/02/2022  TRAIN ASHDOD + EREZ
+python3.8 train.py --data /MyHomeDir/yolo_14_09/data/22_2_ashdod_erez_sliced_for_train.yaml --epochs 100 --batch-size 4 --imgsz 1600 --device 0 --weights weights/yolov5l6-1280.pt --name 22_02_22_ashdod_erez_sliced
+python3.8 train.py --data /MyHomeDir/yolo_14_09/data/22_2_ashdod_erez_sliced_for_train.yaml --epochs 100 --batch-size 4 --imgsz 1600 --device 0 --weights weights/yolov5x6-1280.pt --name 22_02_22_ashdod_erez_sliced_XL
+python3.8 val.py --data data/22_2_ashdod_erez_not_sliced_for_train.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_ashdod_erez_set_fullimg_27_02_22
+
+
+#22/02/2022  TRAIN ASHDOD + EREZ + YOUTUBE
+python3.8 train.py --data /MyHomeDir/yolo_14_09/data/22_2_ashdod_erez_youtube_sliced_for_train.yaml --epochs 100 --batch-size 4 --imgsz 1600 --device 0 --weights weights/yolov5l6-1280.pt --name 22_02_22_ashdod_erez_youtube_sliced
+python3.8 train.py --data /MyHomeDir/yolo_14_09/data/22_2_ashdod_erez_youtube_sliced_for_train.yaml --epochs 50 --batch-size 4 --imgsz 1600 --device 0 --weights weights/yolov5x6-1280.pt --name 22_02_22_ashdod_erez_youtube_sliced_XL
+python3.8 val.py --data data/22_2_ashdod_erez_youtube_not_sliced_for_train.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --half --name val_on_ashdod_erez__youtube_set_fullimg_27_02_22
+python3.8 val.py --data data/22_2_ashdod_erez_youtube_not_sliced_for_train.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --save-conf --save-txt --half --name val_on_ashdod_erez__youtube_set_fullimg_27_02_22
+
+
+DETECTIONS FOR EREZ:
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_15_9-15_49 --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --name weights_erez_youtube_on_erez_15_9-15_49
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_17_59-18_9 --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --name weights_erez_youtube_on_erez_17_59-18_9
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_18_10-18_36 --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --name weights_erez_youtube_on_erez_18_10-18_36
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_18_37-19_12 --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --name weights_erez_youtube_on_erez_18_37-19_12
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/Scenario1 --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --name weights_erez_youtube_on_erez_Scenario1
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/Scenario2 --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --name weights_erez_youtube_on_erez_Scenario2
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/Scenario4 --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --name weights_erez_youtube_on_erez_Scenario4
+
+
+
+ROTEM: new video
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_rotem/Video_17_09_2021_13_54_58.avi --weights weights/yolov5l6-1280.pt --imgsz 1280 --classes 0 2 5 7 --line-thickness 2 --conf-thres 0.4 --name rotem_new_video
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_rotem/Video_17_09_2021_13_54_58.avi --weights weights/yolov5x6-1280.pt --imgsz 1280 --classes 0 2 5 7 --line-thickness 2 --conf-thres 0.4 --name rotem_new_video
+
+
+
+
+XL VAL
+
+python3.8 val.py --data data/tagged_14_02_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced_XL/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --save-conf --half --name val_on_val_set_fullimg_14_02_22_XL_youtube
+python3.8 val.py --data data/tagged_14_02_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_sliced_XL2/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --save-conf --half --name val_on_val_set_fullimg_14_02_22_weights_XL_erezOnly
+
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced_XL/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --save-conf --half --name val_on_erez_set_fullimg_weights_22_02_22_ashdod_erez_XL_youtube
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_sliced_XL2/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --make_movie --save-txt --save-conf --half --name val_on_erez_set_weights_22_02_22_XL_erezOnly
+
+
+
+VAL ON EREZ AND ASHDOD SETS WITH CONF ONLY without MAKE MOVIE
+python3.8 val.py --data data/tagged_14_02_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/train_results_14_02_22/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --save-conf --save-txt --half --name val_on_ashdod_weights_ashdod_with_conf
+python3.8 val.py --data data/tagged_14_02_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --save-conf --save-txt --half --name val_on_ashdod_weights_ashdod_erez_with_conf
+python3.8 val.py --data data/tagged_14_02_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --save-conf --save-txt --half --name 
+
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/train_results_14_02_22/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --save-conf  --save-txt --half --name val_on_erez_set_weights_ashdod_with_conf
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --save-conf --save-txt --half --name val_on_erez_set_weights_ashdod_erez_with_conf
+python3.8 val.py --data data/tagged_22_22_erez_zafrir_not_sliced.yaml --weights //MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --batch_size 1 --confusion_iou_thres 0.002 --conf_thres 0.24 --save-conf --save-txt --half --name val_on_erez_set_weights_ashdod_erez_youtube_with_conf
+
+
+COMMAND FOR DEEP SORT
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/detect_for_erik/black_panther_04-06-2021_10_42-10_43_cam_0.avi --imgsz 3840 --name check_erik_with_deep_sort --yolo_model /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --save-vid --show-vid --save-txt --conf-thres 0.24
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_17_59-18_9.mp4 --name check_erik_with_deep_sort_iou_last4 --yolo_model /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --save-vid --out-video --save-txt --conf-thres 0.24
+
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_17_59-18_9.mp4 --name check_erik_cost_matrix_osnet_ain_x0_75 --yolo_model /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --save-vid --out-video --save-txt --half --device 0 --conf-thres 0.24 --deep_sort_model osnet_ibn_x1_0_MSMT17
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_17_59-18_9.mp4 --name check_erik_cost_matrix_resnet152 --yolo_model /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --save-vid --out-video --save-txt --conf-thres 0.24 --deep_sort_model resnet152
+
+
+TRAIN FOR ROTEM
+python3.8 train.py --data /MyHomeDir/yolo_14_09/data/tagged_rotem_7_3_22.yaml --epochs 100 --batch-size 4 --imgsz 1280 --device 0 --weights weights/yolov5l6-1280.pt --name ROTEM_7_3_22
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_rotem/NEW_MOVIES_7_3_22/video_7_3_2022_11_56 --weights /MyHomeDir/yolo_14_09/runs/train/ROTEM_7_3_22/weights/best.pt --imgsz 1280 --line-thickness 2 --conf-thres 0.25 --name ROTEM_7_3_22
+
+
+NIR USER : u82638
+interpeter: /opt/conda/bin/python3.8
+
+
+YOLO DETECTION FOR NEW TAGGING:
+python3.8 detect.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/forDetection_Apr22/black_panther_13-04-2022_10_8-10_14/ --weights /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --imgsz 3840 --line-thickness 2 --conf-thres 0.25 --half --save-conf --save-txt  --name new_movies_13_04_2022_10_8
+
+DEEPSORT TRAINING WITH OSNET
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/forDetection_Apr22/black_panther_13-04-2022_20_23-20_58/ --name new_movies_conf_dot1_3initN_age30__boxmpl_4_weight_osnetx1_hour_20_23  --yolo_model /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --save-vid --save-txt --half --device 0 --conf-thres 0.1 --deep_sort_model osnet_ibn_x1_0_MSMT17
+
+DEEPSORT WITH PRETRAINED WEIGHTS (SupContrast)
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/atr_zafrir/Erez_full_data_for_detection/black_panther_04-06-2021_17_59-18_9.mp4 --name night_trained_exctarctor --yolo_model /MyHomeDir/yolo_14_09/runs/train/22_02_22_ashdod_erez_youtube_sliced/weights/best.pt --save-vid --out-video --save-txt --half --device 0 --conf-thres 0.1 --deep_sort_model custom_data_ckpt_epoch_800
+
+TRAIN SUPERVISED CONSTRACTIVE
+python3.8 main_supcon.py --batch_size 256 --learning_rate 0.5 --temp 0.1 --dataset path --data_folder Z:\yolo_14_09\data\atr_zafrir\tagged_22_02_22_EREZ_ashdod_youtube\images\train --mean "(0.5204, 0.5234, 0.5141)" --std "(0.1948, 0.1868, 0.1650)"

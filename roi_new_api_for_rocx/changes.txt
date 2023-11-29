@@ -1,0 +1,29 @@
+At yolov5_v7 - utils directory changed to yolo_utils.
+
+yolov5_v7/models/common.py:
+
+import sys
+sys.path.append('/../../../yolov5_v7')
+
+yolov5_v7/yolo_utils/general.py
+
+added:
+
+def is_jupyter():
+    """
+    Check if the current script is running inside a Jupyter Notebook.
+    Verified on Colab, Jupyterlab, Kaggle, Paperspace.
+
+    Returns:
+        bool: True if running inside a Jupyter Notebook, False otherwise.
+    """
+    with contextlib.suppress(Exception):
+        from IPython import get_ipython
+        return get_ipython() is not None
+    return False
+
+deep_sort/deep_sort.py
+
+from torchreid import yolo_utils as torchreidutils -> from torchreid import yolo_utils as utils
+
+module =  torchreidutils.FeatureExtractor -> module =  utils.FeatureExtractor (twice!)

@@ -1,0 +1,49 @@
+xhost +      ( if not working GUi inside our docker container)
+
+docker run --rm -it --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0,1 --device /dev/video0 -e DISPLAY=$DISPLAY -v /home/ubuntu/Swimmers/:/app -v /tmp/.X11-unix:/tmp/.X11-unix --entrypoint /bin/bash pytorch:test-alon-v1
+
+OR without --entrypoint and :
+	docker exec -it torch_id_test bash
+
+TRACKING:
+cd /app/October2022/deepsort_ben/
+YOLO:
+cd /app/yolov5ben/
+
+IMAGES:
+python3.8 detect.py --source data/images/ --weights weights/best.pt --imgsz 2560 --half --name test_detection --conf 0.24 --save-txt
+CAMERA
+python3.8 detect.py --source 0 --device 0,1 --weights weights/best.pt --imgsz 3840 --half --name test_detection --conf 0.24 --save-txt
+
+DEEPSORT:
+python3.8 track.py --source 0 --name testing_deep --yolo_model /app/yolov5ben/weights/best.pt --save-vid --save-txt --device 0,1 --conf-thres 0.1
+#  --deep_sort_model custom_data_ckpt_epoch_1000  # PROBLEM TO LOAD THIS WEIGHTS. new ALBANA maybe
+
+python3.8 track.py --source 0 --name testing_deep --yolo_model ../best.pt --save-vid --save-txt --device 0,1 --conf-thres 0.1 --deep_sort_model custom_data_ckpt_epoch_1000
+
+BYTE_TRACKER:
+
+(SAVE IMAGES AND LABELS for images)
+python3.8 track.py --source data/test/ --yolo_model /app/yolov5ben/weights/best.pt --name testing_byte --imgsz 3840 --save-txt --device 0,1 --conf-thres 0.1 --save-vid --use-bytetracker
+
+(SAVE VIDEO AND LABELS for images)
+python3.8 track.py --source data/test/ --yolo_model /app/yolov5ben/weights/best.pt --name testing_byte --imgsz 3840 --save-txt --device 0,1 --conf-thres 0.1 --save-vid --out-video --use-bytetracker
+
+(SAVE VIDEO AND LABELS for VIDEO)
+python3.8 track.py --source data/detect_for_erik/black_panther_04-06-2021_10_42-10_43_cam_0.avi --yolo_model /app/yolov5ben/weights/best.pt --name testing_byte --imgsz 3840 --save-txt --device 0,1 --conf-thres 0.1 --save-vid --out-video --use-bytetracker
+
+(CAMERA SAVE RESULTS: FRAME ANY AND LABEL FOR EACH DETECT)
+python3.8 track.py --source 0 --yolo_model /app/yolov5ben/weights/best.pt --name testing_byte --imgsz 3840 --save-txt --device 0,1 --conf-thres 0.1 --use-bytetracker --save-vid --save-txt  # NO NEED OUT-VIDEO IN HERE
+
+(CAMERA)
+python3.8 track.py --source 0 --yolo_model /app/yolov5ben/weights/best.pt --name testing_byte --imgsz 3840 --save-txt --device 0,1 --conf-thres 0.1 --out-video --use-bytetracker  # --save-vid
+
+
+--save-vid : saving video picture, if you ADD --out-video so it will save video.
+--save-txt : saving labels of everything(video as 1 file, camera for each frame it will get label)
+
+
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/Baloons_DATA/retagged_7_8_22/vids_for_track_testing/medolal/19_400phantom_time_lapse_4.mp4 --name tracking_medolal_all_fixed_fps_with_yolo_bboxxes_8bboxsize_19_400_phantom_agnostic --yolo_model /MyHomeDir/yolo_14_09/runs/train/all_frames_250epochs_1600_batch4_only_bg_birds_with_Augmentations/weights/best.pt --agnostic-nms --device 0 --conf-thres 0.24 --use-bytetracker --deep_sort_model custom_data_ckpt_epoch_1000 --tracker-lowfps 8 --add-yolobboxes
+python3.8 track.py --source /MyHomeDir/yolo_14_09/data/Baloons_DATA/retagged_7_8_22/vids_for_track_testing/medolal/ --name tracking_medolal_all_new_weights_union_droneWlight_withYoloBBox_lowfps32 --yolo_model /MyHomeDir/yolo_14_09/runs/train/baloons_sliced_1600_train_all_frames_batch4_250epochs_no_birds_augmentaions_union_dronelight/weights/best.pt --agnostic-nms --device 0 --conf-thres 0.24 --use-bytetracker --deep_sort_model custom_data_ckpt_epoch_1000 --tracker-lowfps 8 --add-yolobboxes
+
+sudo chmod -R 777 *

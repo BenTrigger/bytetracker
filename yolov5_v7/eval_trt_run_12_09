@@ -1,0 +1,21 @@
+On 543 images:
+
+Native model: 
+132.4 ms inference 
+Drone AP50,    mAP50-95
+     0.438      0.183
+
+
+engine (not half):
+
+
+180.8ms inference 
+Drone AP50,    mAP50-95
+     0.439      0.185
+     
+engine (half):
+
+
+60.6ms inference 
+Drone AP50,    mAP50-95
+     0.434      0.184

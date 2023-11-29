@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/deep_sort/deep/checkpoint" />
+      <excludeFolder url="file://$MODULE_DIR$/experiment-14.11-logs" />
+      <excludeFolder url="file://$MODULE_DIR$/pkgs_to_install" />
+      <excludeFolder url="file://$MODULE_DIR$/runs" />
+      <excludeFolder url="file://$MODULE_DIR$/weights" />
+      <excludeFolder url="file://$MODULE_DIR$/yolov5_v7/weights" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
+  </component>
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="py.test" />
+  </component>
+</module>

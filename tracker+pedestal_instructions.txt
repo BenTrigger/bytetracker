@@ -1,0 +1,67 @@
+.# To run the pedestal - run this steps:
+
+cd magi/pedestal/
+
+# Run pip install inside a virtual environment if not exists:
+
+$ pip install virtualenv
+$ virtualenv virtualenv_name
+$ source virtualenv_name/bin/activate
+$ pip install -r requirements.txt
+
+
+# GO TO: magi/pedestal/pedestal_mock/config.py
+# MAKE SURE: Servers IP and PORT are the PEDESTALS IP and PORT-
+# In the integration it was:
+# class Server():
+#     HOST = '192.168.10.120'
+#     PORT = 4949
+
+$ python3 run_pedestal_app.py
+
+### SHOULD THEN SEE THE FOLLOWING IF IT WORKS:
+
+
+# INFO:     Will watch for changes in these directories: ['/home/user1/ariel/SUF_UPLOAD_TO_GIT/magi/pedestal']
+# INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+# INFO:     Started reloader process [53742] using StatReload
+# INFO:     Started server process [53744]
+# INFO:     Waiting for application startup.
+# INFO:     Application startup complete.
+
+
+### You can check the pedestal by going in the browser to http:localhost:8000/docs
+### IP AND PORT of the gateway are in magi/pedestal/pedestal_gateway/config.py
+### There you can send the requests manually to the pedestal with the FastAPI client.
+
+$ ctrl + c   # TO STOP
+$ deactivate # ONLY WHEN FINISHED - exit virtual env
+
+
+
+# ---------------------------------------------------
+
+# To Run the Byte Tracker - follow this steps:
+
+
+xhost +
+
+# WITH CAMERA:
+docker run --rm -it --shm-size=32g --runtime=nvidia --network=host -e NVIDIA_VISIBLE_DEVICE=0 -e DISPLAY=$DISPLAY --device /dev/video0 -v /home/user1/ariel:/app -v /tmp/.X11-unix:/tmp/.X11-unix --entrypoint /bin/bash ben_docker:latest
+
+# WITHOUT CAMERA:
+docker run --rm -it --shm-size=32g --runtime=nvidia --network=host -e NVIDIA_VISIBLE_DEVICE=0 -e DISPLAY=$DISPLAY -v /home/user1/ariel:/app -v /tmp/.X11-unix:/tmp/.X11-unix --entrypoint /bin/bash ben_docker:latest
+
+cd /app/byte_tracker_for_einat/
+
+ulimit -c 0
+
+# 4K   3840X2160
+python3 track.py --source 0 --yolo_model yolov5_v7/weights/best_388.pt --name suf_testing --imgsz 3840 --device 0 --conf-thres 0.1 --use-bytetracker --classes 0  --tracker-lowfps 16
+
+# FHD   1920X1080
+python3 track.py --source 0 --yolo_model yolov5_v7/weights/best_388.pt --name suf_testing --imgsz 1920 --device 0 --conf-thres 0.1 --use-bytetracker --classes 0
+
+# --save-txt --save-vid --out-video --match_thresh 0.4 --track_thresh 0.2
+
+# ---------------------------------------------------
