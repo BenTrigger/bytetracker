@@ -17,10 +17,10 @@ def bytetracker_handle(opt, det, xywhs, imgsz, bytetracker):
     if opt.use_bytetracker:  ### BYTE Tracker!
         multiple_num = float(opt.tracker_lowfps)
     if opt.tracker_lowfps > 1: #multiple_det_for_low_fps
-        xywhs[:,2] *= multiple_num
-        xywhs[:,3] *= multiple_num
+        xywhs[:, 2] *= multiple_num
+        xywhs[:, 3] *= multiple_num
         xyxy_multiple = xywh2xyxy(xywhs)
-        det[:,0:4] = xyxy_multiple
+        det[:, 0:4] = xyxy_multiple
         #print("input for bytetracker det %s" % det[0, 0:4])
         online_targets = bytetracker.update(det.detach().cpu().numpy(), imgsz, imgsz)
         #return it back

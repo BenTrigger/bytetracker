@@ -1,0 +1,21 @@
+crop_img: false
+crop_imgsz: [2176, 3840]
+original_imgsz: [2160, 3840]
+classes: 0
+yolo_model: 'yolov5_v7/weights/best_388.pt'
+conf_thres: 0.1
+iou_thres: 0.2
+device: 0
+half: true
+mot20: false
+track_thresh: 0.6
+track_buffer: 30
+match_thresh: 0.9
+min_track_thresh: 0.1
+augment: false
+_check:
+  attack: 2
+  hover:
+  - 2
+  - 8
+prev_is_kalman_box: false
