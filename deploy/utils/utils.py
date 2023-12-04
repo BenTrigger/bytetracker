@@ -4,9 +4,9 @@ def calc_euclidean(box, ref_point):
     for i, _ in enumerate(box):
         dist += (box[i] - ref_point[i]) ** 2
     dist = dist ** (0.5)
-    print('box is ' + str(box))
-    print('ij are' + str(ref_point))
-    print('distance is ' + str(dist))
+    # print('box is ' + str(box))
+    # print('ij are' + str(ref_point))
+    # print('distance is ' + str(dist))
     return dist
 
 def xyxy_to_tlwh(box):
@@ -20,8 +20,8 @@ def xyxy_to_ij(boxes):
         i = int((box[0] + box[2]) / 2)  # 1 , 3
         j = int((box[1] + box[3]) / 2)  # 2 , 4
         box_ij = [i, j, box[4]]  # 5
-        print('box is ' + str(box))
-        print('ij are' + str(box_ij))
+        # print('box is ' + str(box))
+        # print('ij are' + str(box_ij))
         boxes_ij.append(box_ij)
     return boxes_ij
 

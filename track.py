@@ -196,6 +196,7 @@ def detect(opt):
     t1 = 0
     fps_p = 0
     for frame_idx, (path, im, im0s, vid_cap, s) in enumerate(tqdm(dataset, total=len(dataset))): #webcam len = 1
+
         t0 = time_sync()
         if t1:
             print("")

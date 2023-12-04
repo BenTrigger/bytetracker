@@ -51,9 +51,8 @@ class ByteTracker:
         # Yolo Model
         preds = self.model(img_after_flip, augment=self.params.augment, visualize=False)
         preds = non_max_suppression(preds, conf_thres=self.params.conf_thres, iou_thres=self.params.iou_thres, classes=self.params.classes, agnostic=False, max_det=100)
-
+        online = []
         for i, det in enumerate(preds):
-            online_preds_list = []
             if det is not None and len(det):
                 print('Yolo Detected!')
                 # img.shape = original image shape and not cropped image !!!
@@ -62,15 +61,16 @@ class ByteTracker:
                 confs = det[:, 4]
                 #clss = det[:, 5]
                 online_targets = self.bytetracker.update(det.detach().cpu().numpy(), self.params.original_imgsz, self.params.original_imgsz)
-                print('online_targets :%s'%len(online_targets))
-                online = self.online_handle(det, online_targets)
-                print('online :%s'%len(online))
-                online_preds_list = [online_preds_list.append([t.tlbr]) for _, t in enumerate(online_targets)]
-                print('online_preds_list :%s'%len(online_preds_list))
-                [x1, y1, x2, y2] = Euclidean().get_best_pred_by_indication(online_preds_list, i_j_arr, img_after_flip)
+
+                online.append(self.online_handle(det, online_targets))
+
             else:
                 print("No Detections in this image, return None")
                 return None
+        print('online: %s' % online)
+        print('type of online: %s'% type(online))
+        print('type of online[0]: %s'% type(online[0]))
+        [x1, y1, x2, y2] = Euclidean().get_best_pred_by_indication(online, i_j_arr)
         return BoundingBox(x1, y1, x2, y2, confs)  # BoundingBox is Top Left Widgh Hight FORMAT
 
     # def bytetracker_handle(self, det, xywhs):
@@ -109,7 +109,7 @@ class ByteTracker:
             tid = t.track_id
             score = t.score
             cls = t.clss
-            # ENTER HERE FIX OF BBOX LIKE YOLO DETECTION and not kalman filter like bytetracker !!! BEN
+            # CHANGE THE BBOX TO BE YOLO DETECTION and not kalman filter like it works for bytetracker !!! BEN
             for one_det in det:
                 one_conf = one_det[4]
                 one_class = one_det[5]
@@ -127,7 +127,7 @@ class ByteTracker:
         print('stride is : ' + str(self.model.stride))
         # From DateLoader
         print(str(img.shape))
-        im = letterbox(img, self.params.original_imgsz, stride=self.model.stride, auto=self.model.pt)[0]  # padded resize
+        im = letterbox(img, self.imgsz, stride=self.model.stride, auto=self.model.pt)[0]  # padded resize
         im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
         im = np.ascontiguousarray(im)  # contiguous
         print(str(im.shape))
@@ -140,6 +140,7 @@ class ByteTracker:
         return im
 
     def crop_and_fit(self, ref_i_j_point, img):
+        img = self.image_fit_yolo(self.model, img)
         if self.params.crop_img: # If we want to crop the original image to a smaller size
             width_start = int(ref_i_j_point[0] - self.imgsz[1]/2)
             width_end = int(ref_i_j_point[0] + self.imgsz[1]/2)
@@ -148,9 +149,8 @@ class ByteTracker:
             print('width_start: %s, width_end: %s ,height_start: %s , height_end: %s '%(width_start,width_end,height_start, height_end ))
             #if len(img.shape) == 3:  #
             #    img = img[None]
-            img = self.image_fit_yolo(self.model, img)
             img = img[:, :, height_start:height_end, width_start:width_end]
-            print(str(img.shape))
+        print(str(img.shape))
         #img = self.image_fit_yolo(self.model, img)
         return img
 

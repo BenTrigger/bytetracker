@@ -1,6 +1,6 @@
 crop_img: false
-crop_imgsz: [2176, 3840]
-original_imgsz: [2160, 3840]
+crop_imgsz: [2176, 3840 ]
+original_imgsz: [2176, 3840]
 classes: 0
 yolo_model: 'yolov5_v7/weights/best_388.pt'
 conf_thres: 0.1
