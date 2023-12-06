@@ -823,6 +823,15 @@ def resample_segments(segments, n=1000):
         segments[i] = np.concatenate([np.interp(x, xp, s[:, i]) for i in range(2)]).reshape(2, -1).T  # segment xy
     return segments
 
+def det_bt_format(my_list):
+    # reshapeing the det list  to a x1 y1 x2 y2 id prob label form
+    my_list = my_list.tolist()
+    new_list = []
+    for sublist in my_list:
+        new_sublist = sublist[:4] + [0] + sublist[5:] + [sublist[4]]
+        new_list.append(new_sublist)
+    return np.array(new_list)
+
 
 def scale_boxes(img1_shape, boxes, img0_shape, ratio_pad=None):
     # Rescale boxes (xyxy) from img1_shape to img0_shape
@@ -839,7 +848,21 @@ def scale_boxes(img1_shape, boxes, img0_shape, ratio_pad=None):
     clip_boxes(boxes, img0_shape)
     return boxes
 
-
+def fit_boxes(imgsz, boxes, ref_i_j, orig_shape, resized_shape):
+    # fit the boxes to the original image dimentions - compensate the cropping and handeling zero pedding
+    # inputs:
+    # imgsz - cropped image size, boxes - bboxes,
+    # ref_i_j - central point of cropping, orig_shape - original image shape, resized_shape - padded original image
+    imgsz = torch.tensor(imgsz)
+    ref_i_j = torch.tensor(ref_i_j)
+    gain = min(resized_shape[0] / orig_shape[0], resized_shape[1] / orig_shape[1])  # gain  = old / new
+    pad = (resized_shape[1] - orig_shape[1] * gain) / 2, (resized_shape[0] - orig_shape[0] * gain) / 2  # wh padding
+    print('pad is ' + str(pad))
+    boxes[:, 1] += (ref_i_j[1] - imgsz[1]/2) - pad[1]
+    boxes[:, 3] += (ref_i_j[1] - imgsz[1]/2) - pad[1]
+    boxes[:, 0] += (ref_i_j[0] - imgsz[0]/2) - pad[0]
+    boxes[:, 2] += (ref_i_j[0] - imgsz[0]/2) - pad[0]
+    return boxes
 def scale_segments(img1_shape, segments, img0_shape, ratio_pad=None, normalize=False):
     # Rescale coords (xyxy) from img1_shape to img0_shape
     if ratio_pad is None:  # calculate from img0_shape

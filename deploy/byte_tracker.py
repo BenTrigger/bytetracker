@@ -6,7 +6,7 @@ sys.path.append('yolov5_v7')
 from yolov5_v7.models.common import DetectMultiBackend
 from yolov5_v7.utils.general import check_img_size
 from yolov5_v7.utils.augmentations import letterbox
-from yolov5_v7.utils.general import non_max_suppression, scale_boxes
+from yolov5_v7.utils.general import non_max_suppression, scale_boxes, det_bt_format, fit_boxes
 from yolov5_v7.utils.torch_utils import select_device
 sys.path.append('ByteTracker')
 from ByteTrack.yolox.tracker.byte_tracker import BYTETracker
@@ -46,32 +46,47 @@ class ByteTracker:
         print("done")
 
     def flip_treatment(self, img, i_j_arr):
+        self.params.original_imgsz = img.shape[:2]
         img_after_flip = self.crop_and_fit(i_j_arr, img)
 
         # Yolo Model
         preds = self.model(img_after_flip, augment=self.params.augment, visualize=False)
         preds = non_max_suppression(preds, conf_thres=self.params.conf_thres, iou_thres=self.params.iou_thres, classes=self.params.classes, agnostic=False, max_det=100)
         online = []
+        dets = []
+        #print('preds is %s' % preds)
         for i, det in enumerate(preds):
             if det is not None and len(det):
                 print('Yolo Detected!')
                 # img.shape = original image shape and not cropped image !!!
-                det[:, :4] = scale_boxes(img_after_flip.shape[2:], det[:, :4], img.shape).round()
+                #det[:, :4] = scale_boxes(img_after_flip.shape[2:], det[:, :4], img.shape).round()
+                det[:, :4] = fit_boxes(self.imgsz, det[:, :4], i_j_arr, img.shape[:2], self.params.original_imgsz).round()
                 #xywhs = xyxy2xywh(det[:, 0:4])
                 confs = det[:, 4]
                 #clss = det[:, 5]
                 online_targets = self.bytetracker.update(det.detach().cpu().numpy(), self.params.original_imgsz, self.params.original_imgsz)
 
                 online.append(self.online_handle(det, online_targets))
-
+                det_format = det_bt_format(det.detach().cpu().numpy())
+                dets.append(det_format)
             else:
                 print("No Detections in this image, return None")
                 return None
         print('online: %s' % online)
         print('type of online: %s'% type(online))
         print('type of online[0]: %s'% type(online[0]))
-        [x1, y1, x2, y2] = Euclidean().get_best_pred_by_indication(online, i_j_arr)
-        return BoundingBox(x1, y1, x2, y2, confs)  # BoundingBox is Top Left Widgh Hight FORMAT
+        if len(online[0]):
+            [x1, y1, w, h] = Euclidean().get_best_pred_by_indication(online, i_j_arr) # sending bytetracker bboxes
+        else:
+            [x1, y1, w, h] = Euclidean().get_best_pred_by_indication(dets, i_j_arr) # sending ATR bboxes
+
+        #print(img.shape)
+        #print('image bbox are: %s, %s, %s ,%s '%(x1, y1, w, h))
+        #cv2.rectangle(img, (int(x1), int(y1)), (int(x1+w), int(y1+h)), color=(255, 0, 0))
+        #print(inx)
+        #cv2.imwrite('/app/byte_tracker_for_einat_0.3/deploy/results/' + str(inx) + '.jpg' , img)
+        #cv2.putText(img_after_flip, (int(x1), int(y1 - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.9)
+        return BoundingBox(x1, y1, w, h, confs)  # BoundingBox is Top Left Widgh Hight FORMAT
 
     # def bytetracker_handle(self, det, xywhs):
     #     multiple_num = float(self.params.tracker_lowfps)
@@ -127,7 +142,7 @@ class ByteTracker:
         print('stride is : ' + str(self.model.stride))
         # From DateLoader
         print(str(img.shape))
-        im = letterbox(img, self.imgsz, stride=self.model.stride, auto=self.model.pt)[0]  # padded resize
+        im = letterbox(img, self.params.original_imgsz, stride=self.model.stride, auto=self.model.pt)[0]  # padded resize , self.imgsz
         im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
         im = np.ascontiguousarray(im)  # contiguous
         print(str(im.shape))
@@ -135,17 +150,17 @@ class ByteTracker:
         im = torch.from_numpy(im).to(model.device)
         im = im.half() if model.fp16 else im.float()  # uint8 to fp16/32
         im /= 255  # 0 - 255 to 0.0 - 1.0
-        if len(im.shape) == 3:
+        if len(im.shape) == 3: # for batch
             im = im[None]
         return im
 
     def crop_and_fit(self, ref_i_j_point, img):
         img = self.image_fit_yolo(self.model, img)
         if self.params.crop_img: # If we want to crop the original image to a smaller size
-            width_start = int(ref_i_j_point[0] - self.imgsz[1]/2)
-            width_end = int(ref_i_j_point[0] + self.imgsz[1]/2)
-            height_start = int(ref_i_j_point[1] - self.imgsz[0]/2)
-            height_end = int(ref_i_j_point[1] + self.imgsz[0]/2)
+            width_start = int(ref_i_j_point[0] - self.imgsz[0]/2)
+            width_end = int(ref_i_j_point[0] + self.imgsz[0]/2)
+            height_start = int(ref_i_j_point[1] - self.imgsz[1]/2)
+            height_end = int(ref_i_j_point[1] + self.imgsz[1]/2)
             print('width_start: %s, width_end: %s ,height_start: %s , height_end: %s '%(width_start,width_end,height_start, height_end ))
             #if len(img.shape) == 3:  #
             #    img = img[None]
