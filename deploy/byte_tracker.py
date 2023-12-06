@@ -14,26 +14,14 @@ from ByteTrack.yolox.tracker.byte_tracker import BYTETracker
 from deploy.config.config import init_params
 from deploy.algos.euclidean_algo import Euclidean
 
-# DELETE IT and import from ROS api
-class BoundingBox:
-    def __init__(self, x=0, y=0, w=0, h=0, conf=0.0):
-        self.x_offset = x  # Leftmost pixel of the ROI # (0 if the ROI includes the left edge of the image)
-        self.y_offset = y  # Topmost pixel of the ROI # (0 if the ROI includes the top edge of the image)
-        self.width = w  # Width of ROI
-        self.height = h  # Height of ROI
-        self.confidence_level = conf  # confidence of detection 0-1 float
-
-    def set_bbox(self, x, y, w, h, conf=0.0):
-        self.x_offset = x  # Leftmost pixel of the ROI # (0 if the ROI includes the left edge of the image)
-        self.y_offset = y  # Topmost pixel of the ROI # (0 if the ROI includes the top edge of the image)
-        self.width = w  # Width of ROI
-        self.height = h  # Height of ROI
-        self.confidence_level = conf  # confidence of detection 0-1 float
-
+#from tracker_engine.tracker_engine_abc.tracker_engine_abc.tracker_icd_types import BoundingBox
+from utils.utils import BoundingBox
 
 class ByteTracker:
-    def __init__(self, config_file="deploy/config/bytetracker_params.yaml"):
+    def __init__(self, image_size=None, config_file="tracker_engine/byte_tracker/byte_tracker/deploy/config/bytetracker_params.yaml"):
         self.params = init_params(config_file)
+        if image_size is not None:
+            self.params.original_imgsz = image_size
         self.model = DetectMultiBackend(self.params.yolo_model, device=select_device(self.params.device), fp16=self.params.half)
         self.bytetracker = BYTETracker(self.params)
         # if we use cropped image or full image
